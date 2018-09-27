@@ -24,9 +24,8 @@ public class Task {
 	private int TaskNumber=0;
 	public static int T_counter=0;
 	
-	
 	SimpleDateFormat dateFormat;
-	Date date = new Date();
+	Date date ;
 	
 	//Constructor to initial status of the task list to ToDo
 	public Task()
@@ -46,7 +45,7 @@ public class Task {
 	 * @param dueDate String for the DueDate
 	 * @param status Boolean for the task status
 	 */
-	public void setter(String project,String title , Date dueDate, boolean status) 
+	public void setter(String project, String title, Date dueDate, boolean status) 
 	{
 	this.project=project;
 	this.title=title;
@@ -92,18 +91,9 @@ public class Task {
 	@Override
 	public String toString() 
 	{
-		return "[" + project + "," + title + "," + DateToString(dueDate) + "," + status + "," + TaskNumber + "]\n";
+		return "[" + project + "," + title + "," + dateFormat.format(dueDate) + "," + status + "," + TaskNumber + "]\n";
 	}
 	
-	public Date StringToDate(String dueDate) throws ParseException 
-		{
-		return dateFormat.parse(dueDate);
-		}
 	
-	
-	public String DateToString(Date date)
-		{
-		return dateFormat.format(date);
-		}
 	
 	}

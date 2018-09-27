@@ -1,0 +1,1 @@
+typeSearchIndex = [{"p":"<Unnamed>","l":"ReadAndWrite"},{"p":"<Unnamed>","l":"Task"},{"p":"<Unnamed>","l":"TaskManager"},{"p":"<Unnamed>","l":"ToDoly"},{"p":"<Unnamed>","l":"UserInterface"}]

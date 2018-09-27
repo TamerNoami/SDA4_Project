@@ -1,3 +1,8 @@
+/**
+ * This class will be responsible for reading and writing using txt file.
+ * This class is under development 
+ */
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
