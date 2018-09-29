@@ -47,6 +47,7 @@ public class Task {
 	 */
 	public void setter(String project, String title, Date dueDate, boolean status) 
 	{
+		
 	this.project=project;
 	this.title=title;
 	this.dueDate=dueDate;
@@ -91,7 +92,8 @@ public class Task {
 	@Override
 	public String toString() 
 	{
-		return "[" + project + "," + title + "," + dateFormat.format(dueDate) + "," + status + "," + TaskNumber + "]\n";
+		return  "\n" + project + "\n" + title + "\n" + dateFormat.format(dueDate) + "\n" + status + "\n" + TaskNumber + "\n" ;
+		//return "[" + project + "\n" + title + "\n" + dateFormat.format(dueDate) + "\n" + status + "\n" + TaskNumber + "]\n";
 	}
 	
 	

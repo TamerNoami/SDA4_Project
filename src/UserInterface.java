@@ -13,10 +13,11 @@ import java.util.Map.Entry;
 
 public class UserInterface {
 	TaskManager taskManager;
+	
 
 	public UserInterface(TaskManager taskManager) throws FileNotFoundException {
 		this.taskManager = taskManager;
-		//
+		
 	}
 
 	public void Display() throws ParseException {
@@ -83,10 +84,11 @@ public class UserInterface {
 				//Update();
 				System.out.println("Edit Task");
 				break;
-			case 4:
+			case 4: // *****************ÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅ
 				System.out.println("Save and Quit");
-				System.exit(0);
-				break;
+				//writeToFile(taskManager.MapToList());
+				//System.exit(0);
+				//break;
 			default: {
 				break;
 			}

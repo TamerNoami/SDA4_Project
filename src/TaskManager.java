@@ -13,8 +13,7 @@ import java.util.Scanner;
 
 public class TaskManager {
 	Task task;
-	Map<String, List<Task>> ToDol;
-	ReadAndWrite RnW;
+	Map<String, List<Task>> ToDol = new HashMap<String, List<Task>>();
 	List<Task> listOfTask;
 	SimpleDateFormat dateFormat;
 	Date date;
@@ -24,8 +23,8 @@ public class TaskManager {
 	public TaskManager() throws FileNotFoundException {
 		// HashMap key consist of the project name
 		// HashMap value is a list of instance of TaskList
-		ToDol = new HashMap<String, List<Task>>();
-		RnW = new ReadAndWrite();
+		//ToDol = new HashMap<String, List<Task>>();
+		//RnW = new ReadAndWrite();
 		userInterface = new UserInterface(this);
 		date = new Date();
 		dateFormat = new SimpleDateFormat("dd-MM-yyyy");
@@ -147,7 +146,7 @@ public class TaskManager {
 		int TasksCount = 0;
 
 		for (Entry<String, List<Task>> s : ToDol.entrySet())
-		{
+		{System.out.println(ToDol.toString());
 			for (int i = 0; i < s.getValue().size(); i++)
 			{
 				if ((s.getValue().get(i).getTaskStatus().equals("Done")))
@@ -157,7 +156,9 @@ public class TaskManager {
 		}
 		status_count[0] = TasksCount - taskStatus; // tasks ToDo
 		status_count[1] = taskStatus; // tasks are Done
+		System.out.println("SC method" + ToDol.toString());
 		return status_count; // Return the count of ToDo and Done tasks
+
 	}
 
 	// ***********************************************
@@ -221,11 +222,13 @@ public class TaskManager {
 	public String DateToString(Date date) {
 		return dateFormat.format(date);
 	}
-	// Add task method 2 to add elements already exists for ^testing purpose only
+	
+	
+	// Add task method 2 to add elements from the txt file
 		public void AddTask2(String project, Task task)
 		{
 			for (Entry<String, List<Task>> s : ToDol.entrySet())
-			{
+			{ 	
 				if (!(ToDol.isEmpty()) && s.getKey().equalsIgnoreCase(project))
 				{
 					// Add the task to the ArrayList based on the project as a key If already exists
@@ -237,7 +240,9 @@ public class TaskManager {
 			listOfTask = new ArrayList<Task>();
 			listOfTask.add(task);
 			ToDol.put(project, listOfTask);
+			System.out.println("inside add task 2" + ToDol.toString());
 		}
-
+		
+		}
 		// *******************************************************
-}
+

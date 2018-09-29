@@ -25,6 +25,7 @@ public class ToDoly {
 		
 		
 		// Below only for test to put information
+		/*
 		Task tlist1 = new Task();
 		tlist1.setter("Work", "Desgine the classes",taskManager.StringToDate("50-09-2018"), false);
 		taskManager.AddTask2("Work", tlist1);
@@ -45,21 +46,19 @@ public class ToDoly {
 		Task tlist5 = new Task();
 		tlist5.setter("Personal", "Gaming night", taskManager.StringToDate("29-09-2018"), false);
 		taskManager.AddTask2("Personal", tlist5);
-		
+		*/
 		// End of test input data
 		
 		//**** Below I try to call the methods to check it's  **
 		
 		
-		
-		//taskManager.showtask2();
-		userInterface.Display();
-		//System.out.println(taskManager.MapToList(taskManager.ToDol));
-		// Display by date
-		//taskManager.ShowByDate(true);
-		//System.out.println(taskManager.Sorting());
 		//RnW.writeToFile(taskManager.ToDol);
-		//RnW.readFromFile();
+		RnW.readFromFile();
+		userInterface.Display();
+		RnW.writeToFile(taskManager.MapToList());
+
+		
+		
 	}
 
 }
