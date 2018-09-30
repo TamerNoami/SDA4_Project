@@ -5,6 +5,7 @@
  */
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.InputMismatchException;
 import java.util.List;
@@ -12,15 +13,17 @@ import java.util.Scanner;
 import java.util.Map.Entry;
 
 public class UserInterface {
-	TaskManager taskManager;
-	
+	TaskManager taskManager= new TaskManager();
+	ReadAndWrite RnW ;
 
-	public UserInterface(TaskManager taskManager) throws FileNotFoundException {
-		this.taskManager = taskManager;
+	public UserInterface () throws ClassNotFoundException, IOException, ParseException
+	{
+		RnW = new ReadAndWrite(taskManager);
+		RnW.readFromFile();
 		
 	}
 
-	public void Display() throws ParseException {
+	public void Display() throws ParseException, FileNotFoundException {
 		int SC[] = taskManager.StatusCount();
 		System.out.println("-------------------------------------------------");
 		System.out.println(">> Welcome to ToDoly");
@@ -79,14 +82,15 @@ public class UserInterface {
 			case 2:
 				System.out.println(" **** Add New Task ****");
 				taskManager.AddTask();
+				Display();
 				break;
 			case 3:
 				//Update();
 				System.out.println("Edit Task");
 				break;
-			case 4: // *****************ÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅ
+			case 4: // 
 				System.out.println("Save and Quit");
-				//writeToFile(taskManager.MapToList());
+				RnW.writeToFile(taskManager.MapToList());
 				//System.exit(0);
 				//break;
 			default: {
@@ -118,7 +122,7 @@ public class UserInterface {
 			System.out.println("-----------------------------");
 			for (int i = 0; i < s.getValue().size(); i++)
 			{
-				// System.out.println("Project :" + s.getValue().get(i).getProjectName());
+				
 				System.out.println("Title :" + s.getValue().get(i).getTitle());
 				System.out.println("Due Date :" + taskManager.DateToString(s.getValue().get(i).getDueDate()));
 				System.out.println("Status :" + s.getValue().get(i).getTaskStatus());
