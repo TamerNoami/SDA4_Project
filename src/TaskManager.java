@@ -1,4 +1,5 @@
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -17,15 +18,15 @@ public class TaskManager {
 	List<Task> listOfTask;
 	SimpleDateFormat dateFormat;
 	Date date;
-	UserInterface userInterface;
+	//UserInterface userInterface;
 
 	// Constructor to create the HashMap
-	public TaskManager() throws FileNotFoundException {
+	public TaskManager() throws ClassNotFoundException, IOException, ParseException {
 		// HashMap key consist of the project name
 		// HashMap value is a list of instance of TaskList
 		//ToDol = new HashMap<String, List<Task>>();
 		//RnW = new ReadAndWrite();
-		userInterface = new UserInterface(this);
+		//userInterface = new UserInterface();
 		date = new Date();
 		dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 	}
@@ -46,7 +47,7 @@ public class TaskManager {
 		task = new Task();
 		switch (p) {
 		case 0:
-			userInterface.Display();
+			//userInterface.Display();
 			break;
 		case 1:
 			String projects[] = new String[ToDol.size()];
@@ -121,22 +122,41 @@ public class TaskManager {
 		task.setter(project, title, dd, st);
 
 		for (Entry<String, List<Task>> s : ToDol.entrySet())
-		{
+		
 			if (!(ToDol.isEmpty()) && s.getKey().equalsIgnoreCase(project_name))
 			{
 				// Add the task to the ArrayList based on the project as a key If already exists
 				s.getValue().add(task);
-				System.out.println("Successful in adding the task ");
-				userInterface.Display();
+				System.out.println("Successful in adding the task to exsits project ");
+				//userInterface.Display();
+				return ;
 			}
-		}
+			
 		listOfTask = new ArrayList<Task>();
 		listOfTask.add(task);
 		ToDol.put(project, listOfTask);
-		System.out.println("Successful in adding the task ");
-		userInterface.Display();
+		System.out.println("Successful in adding the task to a new project ");
+		//userInterface.Display();
 	}
 
+	// Add task method 2 to add elements from the txt file
+			public void AddTask2(String project, Task task)
+			{
+				for (Entry<String, List<Task>> s : ToDol.entrySet())
+				{ 	
+					if (!(ToDol.isEmpty()) && s.getKey().equalsIgnoreCase(project))
+					{
+						// Add the task to the ArrayList based on the project as a key If already exists
+						s.getValue().add(task);
+						return;
+					}
+				}
+				// Adding the new project in the HashMap a long with the value
+				listOfTask = new ArrayList<Task>();
+				listOfTask.add(task);
+				ToDol.put(project, listOfTask);
+		
+			}
 	// Method to return number of ToDo and Done tasks
 
 	public int[] StatusCount()
@@ -146,7 +166,7 @@ public class TaskManager {
 		int TasksCount = 0;
 
 		for (Entry<String, List<Task>> s : ToDol.entrySet())
-		{System.out.println(ToDol.toString());
+		{
 			for (int i = 0; i < s.getValue().size(); i++)
 			{
 				if ((s.getValue().get(i).getTaskStatus().equals("Done")))
@@ -156,7 +176,6 @@ public class TaskManager {
 		}
 		status_count[0] = TasksCount - taskStatus; // tasks ToDo
 		status_count[1] = taskStatus; // tasks are Done
-		System.out.println("SC method" + ToDol.toString());
 		return status_count; // Return the count of ToDo and Done tasks
 
 	}
@@ -224,24 +243,7 @@ public class TaskManager {
 	}
 	
 	
-	// Add task method 2 to add elements from the txt file
-		public void AddTask2(String project, Task task)
-		{
-			for (Entry<String, List<Task>> s : ToDol.entrySet())
-			{ 	
-				if (!(ToDol.isEmpty()) && s.getKey().equalsIgnoreCase(project))
-				{
-					// Add the task to the ArrayList based on the project as a key If already exists
-					s.getValue().add(task);
-					return;
-				}
-			}
-			// Adding the new project in the HashMap a long with the value
-			listOfTask = new ArrayList<Task>();
-			listOfTask.add(task);
-			ToDol.put(project, listOfTask);
-			System.out.println("inside add task 2" + ToDol.toString());
-		}
+	
 		
 		}
 		// *******************************************************
