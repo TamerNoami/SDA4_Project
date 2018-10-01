@@ -20,13 +20,15 @@ public class UserInterface {
 	{
 		RnW = new ReadAndWrite(taskManager);
 		RnW.readFromFile();
-		
+		System.out.println("*************************************************");
+		System.out.println("********* Welcome to ToDoly Application *********");
+		System.out.println("*************************************************");
 	}
 
 	public void Display() throws ParseException, FileNotFoundException {
 		int SC[] = taskManager.StatusCount();
 		System.out.println("-------------------------------------------------");
-		System.out.println(">> Welcome to ToDoly");
+		System.out.println("		 ToDoly Application ");
 		System.out.println(">> You have " + SC[0] + " tasks todo and " + SC[1] + " tasks are done!");
 		System.out.println(">> Pick an option:");
 		System.out.println(">> (1) Show Task List (by date or project)");
@@ -49,8 +51,9 @@ public class UserInterface {
 			switch (c) {
 			case 1:
 
-				System.out.println("(1) To show Tasks by date (2) To show Tasks by project)");
-				System.out.println("Or (0) To return to main page");
+				System.out.println(">> (1) To show Tasks by date");
+				System.out.println(">> (2) To show Tasks by project");
+				System.out.println(">> (0) To return to main page");
 				System.out.print(">> ");
 				int p = in.nextInt();
 				while (!(p >= 0 && p <= 2)) {
