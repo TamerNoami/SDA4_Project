@@ -1,4 +1,3 @@
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -7,10 +6,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Scanner;
 
 public class TaskManager {
 	Task task;
@@ -24,106 +23,20 @@ public class TaskManager {
 	public TaskManager() throws ClassNotFoundException, IOException, ParseException {
 		// HashMap key consist of the project name
 		// HashMap value is a list of instance of TaskList
-		//ToDol = new HashMap<String, List<Task>>();
-		//RnW = new ReadAndWrite();
-		//userInterface = new UserInterface();
+	
 		date = new Date();
 		dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 	}
 
-	public void AddTask() throws ParseException {
 
-		System.out.println("(1) To add task to exists project (2) To create a new project)");
-		System.out.println("Or (0) To return to previous page");
-		System.out.print(">> ");
-		Scanner in = new Scanner(System.in);
-		int p = in.nextInt();
-		while (!(p >= 0 && p <= 2)) {
-			System.out.println("Wrong option number,");
-			System.out.print("Please enter the option number again :");
-			p = in.nextInt();
-		}
-		in.nextLine();
-		task = new Task();
-		switch (p) {
-		case 0:
-			//userInterface.Display();
-			break;
-		case 1:
-			String projects[] = new String[ToDol.size()];
-			if (ToDol.size() > 0) {
-
-				int pn = 0; // a counter for the temp array of projects
-
-				System.out.println("Exsist project/s   ");
-				for (Entry<String, List<Task>> s : ToDol.entrySet()) {
-					projects[pn] = s.getKey(); // Store the projects into array to add task for already exists projects
-					pn++;
-					System.out.println("Project " + pn + " : " + s.getKey());
-				}
-			}
-			// ***** take the project number and add it to the task
-			System.out.print("Enter a project number you want to add a task to : ");
-			int PN = in.nextInt();
-			PN--; // reduce the index
-			while( !(PN >= 0 && PN <= projects.length))
-			{
-				System.out.print("Invalid choice ... please try again");
-				PN = in.nextInt();
-			}
-			Add(projects[PN]);
-			break;
-		case 2:
-			Add();
-			break;
-		default:
-			System.out.println("Invalid input ");
-			AddTask();
-		}
-	}
-
-	public void Add() throws ParseException
+	public void AddTask(String project, String title, Date dd,boolean st) throws ParseException
 	{
-		Scanner in = new Scanner(System.in);
-		dateFormat.setLenient(false);
-		System.out.print("Enter Project Name : ");
-		String project = in.nextLine();
-		boolean found = false ;
-		for (Entry<String, List<Task>> s : ToDol.entrySet())
-		{
-			if (s.getKey().equalsIgnoreCase(project))
-			{
-				 found = true;
-			} 
-		}
-		if(found)
-		{
-			System.out.println("Project name already exsits .... please check and re-enter ");
-			Add();
-		}
-		else
-		{
-			Add(project);
-		}
-	}
-
-	public void Add(String project_name) throws ParseException
-	{
-		Scanner in = new Scanner(System.in);
-		dateFormat.setLenient(false);
-		String project = project_name;
-		System.out.print("Enter Task Title : ");
-		String title = in.nextLine();
-		System.out.print("Enter Task Due Date, use format dd-MM-yyyy  : ");
-		Date dd = StringToDate(in.nextLine());
-		System.out.print("Enter Task Status : ");
-		String status = in.nextLine();
-		boolean st = status.equalsIgnoreCase("ToDO") ? false : true;
+		Task task=new Task();
 		task.setter(project, title, dd, st);
 
 		for (Entry<String, List<Task>> s : ToDol.entrySet())
 		
-			if (!(ToDol.isEmpty()) && s.getKey().equalsIgnoreCase(project_name))
+			if (!(ToDol.isEmpty()) && s.getKey().equalsIgnoreCase(project))
 			{
 				// Add the task to the ArrayList based on the project as a key If already exists
 				s.getValue().add(task);
@@ -155,7 +68,53 @@ public class TaskManager {
 				listOfTask = new ArrayList<Task>();
 				listOfTask.add(task);
 				ToDol.put(project, listOfTask);
-		
+			}
+			
+			public void RemoveTask(int TaskNumber)
+			{	
+				Iterator<Entry<String, List<Task>>> It = ToDol.entrySet().iterator();
+					while(It.hasNext())
+				{ 	Entry<String, List<Task>> Itr = It.next();
+					for(int i=0 ; i< Itr.getValue().size() ; i++ )
+					{	
+						Task task = Itr.getValue().get(i);
+						if (task.getTaskNumber() == TaskNumber)
+					{
+						Itr.getValue().remove(i);
+						System.out.println("Task has been removed from your list ");
+						//return;
+					}	
+				} 
+					if(Itr.getValue().size()==0)
+					
+						ToDol.remove(Itr.getKey());
+				}
+				
+			}
+			
+			public void StatusEdit(int TaskNumber) throws ParseException
+			{
+				Iterator<Entry<String, List<Task>>> It = ToDol.entrySet().iterator();
+				while(It.hasNext())
+			{ 	Entry<String, List<Task>> Itr = It.next();
+				for(int i=0 ; i< Itr.getValue().size() ; i++ )
+				{	Task task = Itr.getValue().get(i);
+					if (task.getTaskNumber() == TaskNumber)
+				{	
+					if(task.getTaskStatus().equalsIgnoreCase("Done"))
+					{
+					System.out.println("Task status already Done ");
+					return;
+					}
+					else
+					{
+					task.setter(task.getProjectName(), task.getTitle(), task.getDueDate(), true);
+					System.out.println("Task status has been updated ");
+					return;
+					}
+				}
+			}
+			}
 			}
 	// Method to return number of ToDo and Done tasks
 
@@ -219,20 +178,7 @@ public class TaskManager {
 		return list;
 	}
 
-	public void ShowByDate(boolean showT_number) throws ParseException {
-		List<Task> list = Sorting();
-
-		for (Task t : list) {
-			System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^^^");
-			System.out.println("Due Date : " + DateToString(t.getDueDate()));
-			System.out.println("-----------------------");
-			System.out.println("Project : " + t.getProjectName());
-			System.out.println("Title : " + t.getTitle());
-			System.out.println("Status : " + t.getTaskStatus());
-			if (showT_number)
-				System.out.println("Task Number : (" + t.getTaskNumber() + ")");
-		}
-	}
+	
 
 	public Date StringToDate(String dueDate) throws ParseException {
 		return dateFormat.parse(dueDate);

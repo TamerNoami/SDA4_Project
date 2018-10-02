@@ -7,19 +7,25 @@
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.List;
-import java.util.Scanner;
 import java.util.Map.Entry;
+import java.util.Scanner;
 
 public class UserInterface {
 	TaskManager taskManager= new TaskManager();
 	ReadAndWrite RnW ;
+	SimpleDateFormat dateFormat;
+	Date date;
 
 	public UserInterface () throws ClassNotFoundException, IOException, ParseException
 	{
 		RnW = new ReadAndWrite(taskManager);
 		RnW.readFromFile();
+		date = new Date();
+		dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 		System.out.println("*************************************************");
 		System.out.println("********* Welcome to ToDoly Application *********");
 		System.out.println("*************************************************");
@@ -50,7 +56,7 @@ public class UserInterface {
 
 			switch (c) {
 			case 1:
-
+				
 				System.out.println(">> (1) To show Tasks by date");
 				System.out.println(">> (2) To show Tasks by project");
 				System.out.println(">> (0) To return to main page");
@@ -68,7 +74,7 @@ public class UserInterface {
 					break;
 				case 1:
 					System.out.println("Show Tasks by date ** Display by Date");
-					taskManager.ShowByDate(false);
+					ShowByDate(false);
 					Display();
 					break;
 				case 2:
@@ -83,13 +89,138 @@ public class UserInterface {
 
 				break;
 			case 2:
-				System.out.println(" **** Add New Task ****");
-				taskManager.AddTask();
+				System.out.println(" **** Add new task ****");
+				
+				
+				/******************    Moving *************/
+				
+				
+				System.out.println("(1) to add task to exists project ");
+				System.out.println("(2) to create a new project ");
+				System.out.println("(0) to return to previous page");
+				System.out.print(">> ");
+				String project = null;
+				p = in.nextInt();
+				while (!(p >= 0 && p <= 2))
+				{
+					System.out.println("Wrong option number,");
+					System.out.print("Please enter the option number again :");
+					p = in.nextInt();
+				}
+				
+				//task = new Task();
+				switch (p) // ***********   Switch case for option (2)
+				{
+				case 0:
+					//userInterface.Display();
+					break;
+				case 1:
+				
+					String projects[] = new String[taskManager.ToDol.size()];
+					if (taskManager.ToDol.size() > 0) {
+
+						int pn = 0; // a counter for the temp array of projects
+
+						System.out.println("Exsist project/s   ");
+						for (Entry<String, List<Task>> s : taskManager.ToDol.entrySet()) {
+							projects[pn] = s.getKey(); // Store the projects into array to add task for already exists projects
+							pn++;
+							System.out.println("Project " + pn + " : " + s.getKey());
+						}
+					}
+					// ***** take the project number and add it to the task
+					System.out.print("Enter a project number you want to add a task to : ");
+					int PN = in.nextInt();
+					PN--; // reduce the index
+					while( !(PN >= 0 && PN <= projects.length))
+					{
+						System.out.print("Invalid choice ... please try again");
+						PN = in.nextInt();
+					}
+					
+					dateFormat.setLenient(false);
+					 project = projects[PN];
+					 in.nextLine();
+				case 2:
+					
+					
+					if(p==2)
+					{	in.nextLine();
+					
+					boolean found = true ;
+					
+							while(found)
+							{	
+								found = false;
+								System.out.print("Enter Project Name : ");
+								project = in.nextLine();
+								
+								for (Entry<String, List<Task>> s : taskManager.ToDol.entrySet())
+								{
+									
+									if (s.getKey().equalsIgnoreCase(project))
+										found = true;
+								}
+								if(found)
+								System.out.println("Project name already exsits .... please check and re-enter ");
+							}
+							
+						
+					}
+						
+					//in.nextLine();// To move the scanner line *^*^*
+					System.out.print("Enter Task Title : ");
+					String title = in.nextLine();
+					System.out.print("Enter Task Due Date, use format dd-MM-yyyy  : ");
+					Date dd = taskManager.StringToDate(in.nextLine());
+					System.out.print("Enter Task Status : ");
+					String status = in.nextLine();
+					boolean st = status.equalsIgnoreCase("ToDO") ? false : true;
+					taskManager.AddTask(project,title,dd,st);
+						
+				
+					
+					break;
+					
+				default:
+					System.out.println("Invalid input ");
+					//taskManager.AddTask();
+				}
+				/****************** End of Moving *********/
+				//taskManager.AddTask();
 				Display();
 				break;
 			case 3:
-				//Update();
-				System.out.println("Edit Task");
+				ShowByDate(true);
+				System.out.println();
+				System.out.println("(1) to uppdate a task ");
+				System.out.println("(2) to mark a task as Done !  ");
+				System.out.println("(3) to remove a task");
+				System.out.println("(0) to return to previous page");
+				System.out.print(">> ");
+				p = in.nextInt();
+				switch(p)
+				{
+				case 1:
+					
+				case 2:
+					System.out.print("Enter task number for the task you want to make it as Done : ");
+					int TN=in.nextInt();
+					taskManager.StatusEdit(TN);
+					break;
+				case 3:
+					System.out.print("Enter task number for the task you want to make it as Done : ");
+					TN=in.nextInt();
+					taskManager.RemoveTask(TN);
+					break;
+				default:
+					System.out.println("Invalid input ");	
+				}
+				
+				// need to return to previous screen
+				Display();
+				
+		
 				break;
 			case 4: // 
 				System.out.println("Save and Quit");
@@ -136,6 +267,49 @@ public class UserInterface {
 			}
 		}
 		
+	}
+	/*
+	public void showtask() throws ParseException
+	{
+		int taskStatus = 0;
+		int TasksCount = 0;
+		System.out.println("--------------------------------------------------------------------------------");
+		System.out.println("    Project name   			Due Date  		Status   	Title");
+		System.out.println("--------------------------------------------------------------------------------");
+		for (Entry<String, List<Task>> s : taskManager.ToDol.entrySet())
+		{
+			
+			System.out.print("	" + s.getKey());
+			
+			for (int i = 0; i < s.getValue().size(); i++)
+			{
+				System.out.print("		" + taskManager.DateToString(s.getValue().get(i).getDueDate()));
+				System.out.print("				" + s.getValue().get(i).getTaskStatus());
+				System.out.println("						" + s.getValue().get(i).getTitle());
+				// Task number for update method
+				// System.out.println("Task Number :" + s.getValue().get(i).getTaskNumber());
+				System.out.println("");
+				
+			}
+		}
+		
+	}
+	*/
+	
+	public void ShowByDate(boolean showT_number) throws ParseException
+	{
+		List<Task> list = taskManager.Sorting();
+
+		for (Task t : list) {
+			System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^^^");
+			System.out.println("Due Date : " + taskManager.DateToString(t.getDueDate()));
+			System.out.println("-----------------------");
+			System.out.println("Project : " + t.getProjectName());
+			System.out.println("Title : " + t.getTitle());
+			System.out.println("Status : " + t.getTaskStatus());
+			if (showT_number)
+				System.out.println("Task Number : (" + t.getTaskNumber() + ")");
+		}
 	}
 
 }
