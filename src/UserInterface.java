@@ -13,6 +13,7 @@ import java.util.InputMismatchException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class UserInterface {
@@ -20,19 +21,21 @@ public class UserInterface {
 	ReadAndWrite RnW ;
 	SimpleDateFormat dateFormat;
 	Date date;
+	final static String Date_format = "dd-MM-yyyy";
 
 	public UserInterface () throws ClassNotFoundException, IOException, ParseException
 	{
 		RnW = new ReadAndWrite(taskManager);
 		RnW.readFromFile();
 		date = new Date();
-		dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+		dateFormat = new SimpleDateFormat(Date_format);
 		System.out.println("*************************************************");
 		System.out.println("********* Welcome to ToDoly Application *********");
 		System.out.println("*************************************************");
 	}
 
-	public void Display() throws ParseException, FileNotFoundException {
+	public void Display() throws ParseException, FileNotFoundException
+	{
 		int SC[] = taskManager.StatusCount();
 		System.out.println("-------------------------------------------------");
 		System.out.println("		 ToDoly Application ");
@@ -46,15 +49,10 @@ public class UserInterface {
 		System.out.print(">> ");
 		Scanner in = new Scanner(System.in);
 
-		try {
+		
 
-			int c = in.nextInt();
-			while (!(c >= 1 && c <= 4)) {
-				System.out.println("Wrong option number,");
-				System.out.println("Please enter the option number again :");
-				c = in.nextInt();
-			}
-
+			int c = validate(1,4);
+			
 			switch (c) {
 			case 1:
 				
@@ -62,13 +60,8 @@ public class UserInterface {
 				System.out.println(">> (2) To show Tasks by project");
 				System.out.println(">> (0) To return to main page");
 				System.out.print(">> ");
-				int p = in.nextInt();
-				while (!(p >= 0 && p <= 2)) {
-					System.out.println("Wrong option number,");
-					System.out.println("Please enter the option number again :");
-					p = in.nextInt();
-				}
-
+				
+				int p = validate(0,2);
 				switch (p) {
 				case 0:
 					Display(); // Return to main display
@@ -93,22 +86,13 @@ public class UserInterface {
 				System.out.println(" **** Add new task ****");
 				
 				
-				/******************    Moving *************/
-				
-				
-				System.out.println("(1) to add task to exists project ");
-				System.out.println("(2) to create a new project ");
+				System.out.println("(1) to add a task to exists project ");
+				System.out.println("(2) to add a task with a new project ");
 				System.out.println("(0) to return to previous page");
 				System.out.print(">> ");
 				String project = null;
-				p = in.nextInt();
-				while (!(p >= 0 && p <= 2))
-				{
-					System.out.println("Wrong option number,");
-					System.out.print("Please enter the option number again :");
-					p = in.nextInt();
-				}
 				
+				p = validate(0,2);
 				switch (p) // ***********   Switch case for option (2)
 				{
 				case 0:
@@ -130,26 +114,19 @@ public class UserInterface {
 					}
 					// ***** take the project number and add it to the task
 					System.out.print("Enter a project number you want to add a task to : ");
-					int PN = in.nextInt();
+					int PN = validate(1,projects.length); 
 					PN--; // reduce the index
-					while( !(PN >= 0 && PN <= projects.length))
-					{
-						System.out.print("Invalid choice ... please try again");
-						PN = in.nextInt();
-					}
-					
-					dateFormat.setLenient(false);
 					 project = projects[PN];
-					 in.nextLine();
+					 //in.nextLine(); // move the scanner
 				case 2:
 					
 					
 					if(p==2)
-					{	in.nextLine();
+						{
+						//in.nextLine();// move the scanner
+						boolean found = true ;
 					
-					boolean found = true ;
-					
-							while(found)
+						while(found)
 							{	
 								found = false;
 								System.out.print("Enter Project Name : ");
@@ -164,30 +141,27 @@ public class UserInterface {
 								if(found)
 								System.out.println("Project name already exsits .... please check and re-enter ");
 							}
-							
+						}
 						
-					}
-						
-					//in.nextLine();// To move the scanner line *^*^*
+					
 					System.out.print("Enter Task Title : ");
 					String title = in.nextLine();
 					System.out.print("Enter Task Due Date, use format dd-MM-yyyy  : ");
-					Date dd = taskManager.StringToDate(in.nextLine());
+					Date dd = taskManager.StringToDate(ValDate());
 					System.out.print("Enter Task Status : ");
-					String status = in.nextLine();
+					//String status = in.nextLine();
+					String status=StatusCheck();
 					boolean st = status.equalsIgnoreCase("ToDO") ? false : true;
 					taskManager.AddTask(project,title,dd,st);
-						
-				
-					
+					System.out.println("Successful in adding the task ");	
 					break;
 					
 				default:
 					System.out.println("Invalid input ");
-					//taskManager.AddTask();
+					Display();
 				}
-				/****************** End of Moving *********/
-				//taskManager.AddTask();
+				
+				//need to return to option 2
 				Display();
 				break;
 			case 3:
@@ -198,7 +172,7 @@ public class UserInterface {
 				System.out.println("(3) to remove a task");
 				System.out.println("(0) to return to previous page");
 				System.out.print(">> ");
-				p = in.nextInt();
+				p = validate(0,3);
 				switch(p)
 				{
 				case 1:
@@ -216,14 +190,14 @@ public class UserInterface {
 					taskManager.StatusEdit(p);
 					else
 					System.out.println("No exsits task number ");	
-					break;
+					break; // Need to return
 				case 3:
 					System.out.print("Enter task number to remove : ");
 					p=in.nextInt();
 					if(taskManager.TaskNumberCheck(p))
 					taskManager.RemoveTask(p);
 					else
-					System.out.print("No exsits task number ");	
+					System.out.print("Not exsits task number ");	
 					break;
 				default:
 					System.out.println("Invalid input ");	
@@ -244,17 +218,13 @@ public class UserInterface {
 			}
 
 			}
+			in.close();
 		} // Try ends here
-		catch (InputMismatchException e)
+		
 
-		{
-			System.out.println("Invalid Input ... please try again ");
-			Display();
-		}
+		
 
-		in.close();
-
-	} // End if display method
+	
 
 	public void showtask() throws ParseException
 	{
@@ -333,8 +303,8 @@ public class UserInterface {
 								
 								System.out.println("Exsits title : **" + taskManager.DateToString(task.getDueDate())+ "**");
 								System.out.println("Enter a new title or press Enter to keep it same");
-								String date = in.nextLine();
-								
+								//String date = in.nextLine();
+								String date =ValDate();
 								boolean st = task.getTaskStatus().equalsIgnoreCase("ToDo") ? false : true;
 								project = (project.length()==0) ? task.getProjectName() : project ;
 								title = (title.length()==0) ? task.getTitle() : title ;
@@ -357,6 +327,94 @@ public class UserInterface {
 					}
 			}
 	}
+	
+	
+	public int validate(int a,int b) 
+	{
+		int c =0;
+		try 
+		{
+			Scanner in = new Scanner(System.in);
+			System.out.print("Pick an option number  " );
+			 c = in.nextInt();
+			while (!(c >= a && c <= b)) {
+				System.out.println("Wrong option number,");
+				System.out.print("Please enter the option number again between " + a + " and " + b + " >> ");
+				c = in.nextInt();
+			}
+		}
+		catch (InputMismatchException e)
+		{
+			System.out.println("Invalid Input ... please try again ");
+			c = validate(a,b);
+		}
+			
+			
+		return c;
+	}
+	
+	public String ValDate()
+	{	 
+		dateFormat.setLenient(false);
+		String DateCheck = null ;
+		boolean  isValidDate ;
+		Scanner in = new Scanner(System.in);	
+		try
+		{
+		do
+		{	
+			DateCheck = in.nextLine();
+			date=taskManager.StringToDate(DateCheck.trim());
+			isValidDate=true;
+			//return DateCheck;
+		}while(!isValidDate);
+
+	    }
+	        catch (ParseException e)
+	        {
+	        	System.out.println(e.getMessage());
+	        	System.out.println(DateCheck + " is Invalid Date format, use dd-MM-yyyy format >>");
+	            ValDate();
+	            
+	        }
+		catch (NoSuchElementException e)
+        {
+            System.out.println(DateCheck + " is Invalid Date format, use dd-MM-yyyy format >>");
+            ValDate();
+            
+        }
+	        
+	
+		return DateCheck;
+	    }
+			
+	
+	
+	
+	public String StatusCheck()
+	{
+		String status =null;
+		try 
+		{
+			Scanner in = new Scanner(System.in);
+			status = in.nextLine();
+			
+			while (!(status.trim().equalsIgnoreCase("ToDo") || status.trim().equalsIgnoreCase("Done"))) {
+				System.out.println("Wrong Status,");
+				System.out.print("Please enter the status again as Done or ToDo : >> ");
+				status = in.nextLine();
+			} 
+		}
+		catch (InputMismatchException e)
+		{
+			System.out.println("Invalid Input ... please try again ");
+			status = StatusCheck();
+		}
+		
+		return status;
+	}
+	
+	
 	
 	public void ShowByDate(boolean showT_number) throws ParseException
 	{

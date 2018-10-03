@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.ConcurrentModificationException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -17,7 +18,8 @@ public class TaskManager {
 	List<Task> listOfTask;
 	SimpleDateFormat dateFormat;
 	Date date;
-	//UserInterface userInterface;
+	final static String Date_format = "dd-MM-yyyy";
+	
 
 	// Constructor to create the HashMap
 	public TaskManager() throws ClassNotFoundException, IOException, ParseException {
@@ -25,7 +27,7 @@ public class TaskManager {
 		// HashMap value is a list of instance of TaskList
 	
 		date = new Date();
-		dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+		dateFormat = new SimpleDateFormat(Date_format);
 	}
 
 
@@ -40,7 +42,7 @@ public class TaskManager {
 			{
 				// Add the task to the ArrayList based on the project as a key If already exists
 				s.getValue().add(task);
-				System.out.println("Successful in adding the task to exsits project ");
+				//System.out.println("Successful in adding the task to exsits project ");
 				//userInterface.Display();
 				return ;
 			}
@@ -48,7 +50,7 @@ public class TaskManager {
 		listOfTask = new ArrayList<Task>();
 		listOfTask.add(task);
 		ToDol.put(project, listOfTask);
-		System.out.println("Successful in adding the task to a new project ");
+		//System.out.println("Successful in adding the task to a new project ");
 		//userInterface.Display();
 	}
 
@@ -72,6 +74,8 @@ public class TaskManager {
 			
 			public void RemoveTask(int TaskNumber)
 			{	
+				try
+				{
 				Iterator<Entry<String, List<Task>>> It = ToDol.entrySet().iterator();
 					while(It.hasNext())
 					{ 
@@ -89,7 +93,11 @@ public class TaskManager {
 					if(Itr.getValue().size()==0)
 						ToDol.remove(Itr.getKey());
 					}
-				
+				}
+				catch (ConcurrentModificationException e)
+				{
+					return;
+				}
 			}
 			
 			public void StatusEdit(int TaskNumber) throws ParseException
@@ -118,9 +126,9 @@ public class TaskManager {
 			}
 			
 			
-			//***********  Work here   ******************
+			
 			public void update(int TaskNumber,String project, String title, Date dd,boolean st) throws ParseException
-			{
+			{	
 				Iterator<Entry<String, List<Task>>> It = ToDol.entrySet().iterator();
 				while(It.hasNext())
 			{ 	Entry<String, List<Task>> Itr = It.next();
@@ -130,12 +138,13 @@ public class TaskManager {
 					{
 					task.setter(project, title, dd, st);
 					System.out.println("Task task has been edited ");
-					return;
+					break;
 					}
 						
 					
 				}
 			}
+				
 			}
 			
 	// Method to return number of ToDo and Done tasks

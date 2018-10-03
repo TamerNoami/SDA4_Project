@@ -3,7 +3,7 @@
   associations="true" dependencies="false" nesting-relationships="true" router="FAN">  
   <class id="1" language="java" name="ReadAndWrite" project="ToDoly" file="/ToDoly/src/ReadAndWrite.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="157" width="252" x="41" y="196"/>    
+    <position height="157" width="252" x="139" y="57"/>    
     <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -21,7 +21,7 @@
   </class>  
   <class id="3" language="java" name="TaskManager" project="ToDoly" file="/ToDoly/src/TaskManager.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="317" width="195" x="354" y="196"/>    
+    <position height="-1" width="-1" x="750" y="507"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -29,9 +29,9 @@
     </display>  
   </class>  
   <class id="4" language="java" name="ToDoly" project="ToDoly" file="/ToDoly/src/ToDoly.java" binary="false" 
-    corner="BOTTOM_RIGHT">    
-    <position height="99" width="131" x="183" y="37"/>    
-    <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" 
+    corner="TOP_RIGHT">    
+    <position height="99" width="143" x="445" y="19"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
@@ -39,7 +39,7 @@
   </class>  
   <class id="5" language="java" name="UserInterface" project="ToDoly" file="/ToDoly/src/UserInterface.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="119" width="179" x="354" y="37"/>    
+    <position height="-1" width="-1" x="844" y="138"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -52,10 +52,10 @@
   </dependency>  
   <association id="7">    
     <end type="SOURCE" refId="3" navigable="false">      
-      <attribute id="8" name="task">        
+      <attribute id="8" name="listOfTask">        
         <position height="0" width="0" x="-272" y="-141"/>      
       </attribute>      
-      <multiplicity id="9" minimum="0" maximum="1">        
+      <multiplicity id="9" minimum="0" maximum="2147483647">        
         <position height="0" width="0" x="-272" y="-141"/>      
       </multiplicity>    
     </end>    
@@ -63,51 +63,34 @@
     <display labels="true" multiplicity="true"/>  
   </association>  
   <association id="10">    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="11" name="taskManager">        
+        <position height="0" width="0" x="299" y="153"/>      
+      </attribute>      
+      <multiplicity id="12" minimum="0" maximum="1">        
+        <position height="0" width="0" x="299" y="153"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="3" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="13">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="5"/>  
+  </dependency>  
+  <association id="14">    
     <end type="SOURCE" refId="3" navigable="false">      
-      <attribute id="11" name="listOfTask">        
+      <attribute id="15" name="task">        
         <position height="0" width="0" x="-272" y="-141"/>      
       </attribute>      
-      <multiplicity id="12" minimum="0" maximum="2147483647">        
+      <multiplicity id="16" minimum="0" maximum="1">        
         <position height="0" width="0" x="-272" y="-141"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="2" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <dependency id="13">    
-    <bendpoint x="323" y="196"/>    
-    <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="2"/>  
-  </dependency>  
-  <dependency id="14">    
-    <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="1"/>  
-  </dependency>  
-  <association id="15">    
-    <end type="SOURCE" refId="5" navigable="false">      
-      <attribute id="16" name="taskManager">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="17" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="3" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="18">    
-    <end type="SOURCE" refId="3" navigable="false">      
-      <attribute id="19" name="userInterface">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="20" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="5" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
     sort-features="false" accessors="true" visibility="true">    
     <attributes public="true" package="true" protected="true" private="true" static="true"/>    
     <operations public="true" package="true" protected="true" private="true" static="true"/>  
