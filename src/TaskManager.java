@@ -74,21 +74,21 @@ public class TaskManager {
 			{	
 				Iterator<Entry<String, List<Task>>> It = ToDol.entrySet().iterator();
 					while(It.hasNext())
-				{ 	Entry<String, List<Task>> Itr = It.next();
-					for(int i=0 ; i< Itr.getValue().size() ; i++ )
-					{	
+					{ 
+						Entry<String, List<Task>> Itr = It.next();
+						for(int i=0 ; i< Itr.getValue().size() ; i++ )
+						{	
 						Task task = Itr.getValue().get(i);
 						if (task.getTaskNumber() == TaskNumber)
-					{
+							{
 						Itr.getValue().remove(i);
 						System.out.println("Task has been removed from your list ");
 						//return;
-					}	
-				} 
+							}	
+						} 
 					if(Itr.getValue().size()==0)
-					
 						ToDol.remove(Itr.getKey());
-				}
+					}
 				
 			}
 			
@@ -116,8 +116,29 @@ public class TaskManager {
 			}
 			}
 			}
+			
+			
+			//***********  Work here   ******************
+			public void update(int TaskNumber,String project, String title, Date dd,boolean st) throws ParseException
+			{
+				Iterator<Entry<String, List<Task>>> It = ToDol.entrySet().iterator();
+				while(It.hasNext())
+			{ 	Entry<String, List<Task>> Itr = It.next();
+				for(int i=0 ; i< Itr.getValue().size() ; i++ )
+				{	Task task = Itr.getValue().get(i);
+					if (task.getTaskNumber() == TaskNumber)
+					{
+					task.setter(project, title, dd, st);
+					System.out.println("Task task has been edited ");
+					return;
+					}
+						
+					
+				}
+			}
+			}
+			
 	// Method to return number of ToDo and Done tasks
-
 	public int[] StatusCount()
 	{
 		int[] status_count = new int[2];
@@ -137,6 +158,21 @@ public class TaskManager {
 		status_count[1] = taskStatus; // tasks are Done
 		return status_count; // Return the count of ToDo and Done tasks
 
+	}
+	
+	public boolean TaskNumberCheck(int TN)
+	{
+		boolean found = false;
+		Iterator<Entry<String, List<Task>>> It = ToDol.entrySet().iterator();
+		while(It.hasNext())
+	{ 	Entry<String, List<Task>> Itr = It.next();
+		for(int i=0 ; i< Itr.getValue().size() ; i++ )
+		{	Task task = Itr.getValue().get(i);
+			if (task.getTaskNumber() == TN)
+			found = true;
+			
+	}}
+	return found;	
 	}
 
 	// ***********************************************

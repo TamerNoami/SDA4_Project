@@ -10,6 +10,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.InputMismatchException;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Scanner;
@@ -108,7 +109,6 @@ public class UserInterface {
 					p = in.nextInt();
 				}
 				
-				//task = new Task();
 				switch (p) // ***********   Switch case for option (2)
 				{
 				case 0:
@@ -193,7 +193,7 @@ public class UserInterface {
 			case 3:
 				ShowByDate(true);
 				System.out.println();
-				System.out.println("(1) to uppdate a task ");
+				System.out.println("(1) to edit a task ");
 				System.out.println("(2) to mark a task as Done !  ");
 				System.out.println("(3) to remove a task");
 				System.out.println("(0) to return to previous page");
@@ -202,16 +202,28 @@ public class UserInterface {
 				switch(p)
 				{
 				case 1:
-					
+					System.out.println("Enter task number you want to edit : ");
+					p=in.nextInt();
+					if(taskManager.TaskNumberCheck(p))
+					edit(p);
+					else
+					System.out.println("No exsits task number ");
+					break;
 				case 2:
-					System.out.print("Enter task number for the task you want to make it as Done : ");
-					int TN=in.nextInt();
-					taskManager.StatusEdit(TN);
+					System.out.println("Enter task number for the task you want to make it as Done : ");
+					p=in.nextInt();
+					if(taskManager.TaskNumberCheck(p))
+					taskManager.StatusEdit(p);
+					else
+					System.out.println("No exsits task number ");	
 					break;
 				case 3:
-					System.out.print("Enter task number for the task you want to make it as Done : ");
-					TN=in.nextInt();
-					taskManager.RemoveTask(TN);
+					System.out.print("Enter task number to remove : ");
+					p=in.nextInt();
+					if(taskManager.TaskNumberCheck(p))
+					taskManager.RemoveTask(p);
+					else
+					System.out.print("No exsits task number ");	
 					break;
 				default:
 					System.out.println("Invalid input ");	
@@ -295,6 +307,56 @@ public class UserInterface {
 		
 	}
 	*/
+	
+	
+	
+	
+	public void edit(int TaskNumber) throws ParseException
+	{
+		Scanner in = new Scanner(System.in);
+		Iterator<Entry<String, List<Task>>> It = taskManager.ToDol.entrySet().iterator();
+		while(It.hasNext())
+			{ 	
+			Entry<String, List<Task>> Itr = It.next();
+				for(int i=0 ; i< Itr.getValue().size() ; i++ )
+					{	
+					Task task = Itr.getValue().get(i);
+						if (task.getTaskNumber() == TaskNumber)
+							{
+								System.out.println("Exsits project name : **" + task.getProjectName()+ "**");
+								System.out.println("Enter a new project name or press Enter to keep it same");
+								String project = in.nextLine();
+								
+								System.out.println("Exsits title : **" + task.getTitle());
+								System.out.println("Enter a new title or press Enter to keep it same"+ "**");
+								String title = in.nextLine();
+								
+								System.out.println("Exsits title : **" + taskManager.DateToString(task.getDueDate())+ "**");
+								System.out.println("Enter a new title or press Enter to keep it same");
+								String date = in.nextLine();
+								
+								boolean st = task.getTaskStatus().equalsIgnoreCase("ToDo") ? false : true;
+								project = (project.length()==0) ? task.getProjectName() : project ;
+								title = (title.length()==0) ? task.getTitle() : title ;
+								date = (date.length()==0) ? taskManager.DateToString(task.getDueDate()) : date ;
+								// If the project name changes ... I need to move to task in the HashMap
+								if (project.equals( task.getProjectName()))
+								{
+								taskManager.update(TaskNumber, project,title,taskManager.StringToDate(date),st);
+								return;
+								}
+								else
+								{
+									taskManager.AddTask(project, title, taskManager.StringToDate(date), st);
+									taskManager.RemoveTask(TaskNumber);
+									return;
+								}
+							}
+				
+			
+					}
+			}
+	}
 	
 	public void ShowByDate(boolean showT_number) throws ParseException
 	{
