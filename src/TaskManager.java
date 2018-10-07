@@ -11,6 +11,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 public class TaskManager {
 	Task task;
@@ -28,6 +30,7 @@ public class TaskManager {
 	
 		date = new Date();
 		dateFormat = new SimpleDateFormat(Date_format);
+		
 	}
 
 
@@ -136,6 +139,7 @@ public class TaskManager {
 				{	Task task = Itr.getValue().get(i);
 					if (task.getTaskNumber() == TaskNumber)
 					{
+					
 					task.setter(project, title, dd, st);
 					System.out.println("Task task has been edited ");
 					break;
@@ -169,6 +173,8 @@ public class TaskManager {
 
 	}
 	
+	
+	// // Method to validate the user entry for the task number for editing purposes
 	public boolean TaskNumberCheck(int TN)
 	{
 		boolean found = false;
@@ -202,7 +208,11 @@ public class TaskManager {
 		}
 		return TempList;
 	}
-
+	
+	
+	
+	
+	
 	public List<Task> Sorting()
 	{
 		List<Task> list = MapToList();

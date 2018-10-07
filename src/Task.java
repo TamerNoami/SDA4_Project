@@ -33,7 +33,6 @@ public class Task {
 	// Initiate all the task status to ToDO
 	this.status=false;
 	TaskNumber=T_counter;
-	//T_counter++;
 	date = new Date();
 	dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 	}
