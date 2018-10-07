@@ -9,7 +9,7 @@ import java.util.Date;
 
 public class Task {
 	/**
-	 * The fields for the task as follow
+	 * The fields for the task are as follow
 	 * String project to store the project name
 	 * String title to store the task title or description
 	 * Date for the dueDate of the task
@@ -33,7 +33,7 @@ public class Task {
 	// Initiate all the task status to ToDO
 	this.status=false;
 	TaskNumber=T_counter;
-	T_counter++;
+	//T_counter++;
 	date = new Date();
 	dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 	}
@@ -52,6 +52,7 @@ public class Task {
 	this.title=title;
 	this.dueDate=dueDate;
 	this.status=status;
+	T_counter++;
 	TaskNumber=T_counter;
 	}
 	
@@ -93,7 +94,7 @@ public class Task {
 	public String toString() 
 	{
 		return  "\n" + project + "\n" + title + "\n" + dateFormat.format(dueDate) + "\n" + status + "\n" + TaskNumber + "\n" ;
-		//return "[" + project + "\n" + title + "\n" + dateFormat.format(dueDate) + "\n" + status + "\n" + TaskNumber + "]\n";
+		
 	}
 	
 	
