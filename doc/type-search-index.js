@@ -1,1 +1,1 @@
-typeSearchIndex = [{"p":"<Unnamed>","l":"ReadAndWrite"},{"p":"<Unnamed>","l":"Task"},{"p":"<Unnamed>","l":"TaskManager"},{"p":"<Unnamed>","l":"ToDoly"},{"p":"<Unnamed>","l":"UserInterface"}]
+typeSearchIndex = [{"p":"readWrite","l":"ReadAndWrite"},{"p":"core","l":"Task"},{"p":"core","l":"TaskManager"},{"p":"main","l":"ToDoly"},{"p":"core","l":"UserInterface"}]

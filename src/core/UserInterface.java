@@ -1,6 +1,9 @@
+package core;
 
 /**
  * This class is going to deal with all user interfaces and display methods.
+ * It deals with instance from TaskManager to use it's methods and fields
+ * ToDol is the HashMap that stores all the tasks
  * 
  */
 
@@ -19,6 +22,8 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
+import readWrite.ReadAndWrite;
+
 public class UserInterface{
 	TaskManager taskManager= new TaskManager();
 	ReadAndWrite RnW ;
@@ -30,6 +35,14 @@ public class UserInterface{
 	final static String Format3 = "| %-10s | %-6s | %-70s |%n";
 	final static String Format4 = "| %-4d | %-20s |%n";  
 
+
+	/**
+	 * The class constructor that read the tasks from the file into the HashMap
+	 * after creating an instance of the TaskManager
+	 * @throws ClassNotFoundException
+	 * @throws IOException
+	 * @throws ParseException
+	 */
 	public UserInterface () throws ClassNotFoundException, IOException, ParseException
 	{
 		RnW = new ReadAndWrite(taskManager);
@@ -41,6 +54,12 @@ public class UserInterface{
 		System.out.println("*************************************************");
 	}
 
+	
+	/**
+	 * The main screen method for the user interface that deals with the user first choices 
+	 * @throws ParseException for the date printing
+	 * @throws FileNotFoundException for reading from the file 
+	 */
 	public void Display() throws ParseException, FileNotFoundException
 	{
 		int SC[] = taskManager.StatusCount();
@@ -59,22 +78,26 @@ public class UserInterface{
 		
 
 			int c = validate(1,4);
-			
+			// The main switch case for the main console screen
 			switch (c) 
 			{
 			case 1:
+				// Calling the method responsible for Option 1 for displaying
 				UserInterfaceDisplayOption();
 				break;
 			case 2:
 				System.out.println(" **** Add new task ****");
+				// Calling the method responsible for Option 2 for Adding tasks
 				UserInterfaceAddOption();
 				break;
 			case 3:
+				// Calling the method responsible for Option 3 for updating and deleting tasks
 				UserInterfaceEditOption();
-				Display();
 				break;
 			case 4: // 
 				System.out.println("Save and Quit");
+				// Calling the method responsible for writing the task from the HashMap to the txt file as an ArrayList
+				// before closing the App
 				RnW.writeToFile(taskManager.MapToList());
 				in.close();
 				System.exit(0);
@@ -87,37 +110,50 @@ public class UserInterface{
 		} // End of Display method
 		
 
-		// Method for Option 1 in the main console screen
+		
+	/**
+	 * Method for Option 1 for the Displaying options in the main console screen
+	 * @throws ParseException
+	 */
 	public void UserInterfaceDisplayOption() throws FileNotFoundException, ParseException
 	{
+		System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
 		System.out.println(">> (1) To show Tasks by date");
 		System.out.println(">> (2) To show Tasks by project");
 		System.out.println(">> (0) To return to main page");
+		System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
 		System.out.print(">> ");
-		
 		int p = validate(0,2);
+		// Switch case for the sub menu for the Option 1 Adding
 		switch (p) {
 		case 0:
 			Display(); // Return to main display
 			break;
 		case 1:
 			System.out.println("Show Tasks by date ** Display by Date");
+			// Calling the method responsible for displaying the task Date wise
 			ShowByDate(false);
-			UserInterfaceDisplayOption();
+			UserInterfaceDisplayOption(); // To return to sub menu 1
 			break;
 		case 2:
 			System.out.println("Show Tasks by project ** Display by project");
-			showtask();
-			UserInterfaceDisplayOption();
+			// Calling the method responsible for displaying the task  filtered by project
+			ShowTasksByProject();
+			UserInterfaceDisplayOption();// To return to sub menu 1
 			break;
 		default:
 			System.out.println("Invalid input ");
-			UserInterfaceDisplayOption();
+			UserInterfaceDisplayOption();// To return to sub menu 1
 		}	
 	} // End of Option 1 method
 	
 	
-	// Method for Option 2 in the main console screen
+	
+	/**
+	 * Method for Option 2 for Adding options in the main console screen
+	 * @throws ParseException for the date printing
+	 * 
+	 */
 	public void UserInterfaceAddOption() throws ParseException, FileNotFoundException
 	{
 		System.out.println("(1) to add a task to exists project ");
@@ -130,9 +166,10 @@ public class UserInterface{
 		switch (p) // ***********   Switch case for option (2)
 		{
 		case 0:
-			Display();
+			Display(); // return to main screen
 			break;
 		case 1:
+			// Assign the project name to a variable and pass it to case 2 to for adding 
 			project = projectnames("add");
 		case 2:
 			Scanner sc = new Scanner(System.in);
@@ -164,7 +201,7 @@ public class UserInterface{
 			Date dd = taskManager.StringToDate(ValDate());
 			System.out.print("Enter Task Status : ");
 			
-			String status=StatusCheck();
+			String status=StatusCheck(); // Validate the user input for task status
 			boolean st = status.equalsIgnoreCase("ToDO") ? false : true;
 			taskManager.AddTask(project,title,dd,st);
 			System.out.println("^^^ Successful in adding the task ^^");	
@@ -173,67 +210,80 @@ public class UserInterface{
 			
 		default:
 			System.out.println("Invalid input ");
-			UserInterfaceAddOption();
+			UserInterfaceAddOption(); // To return to sub menu 2
 		}
 		
 	} // End of Option 2 method
 	
 	
-	// Method for Option 3 in the main console screen
+	
+	/**
+	 * Method for Option 3 for Editing options in the main console screen
+	 * @throws ParseException for the date printing
+	 */
 public void UserInterfaceEditOption() throws ParseException, FileNotFoundException
 {
 	Scanner in= new Scanner(System.in);
 	System.out.println();
 	System.out.println("(1) to edit a task ");
-	System.out.println("(2) to mark a task as Done !  ");
+	System.out.println("(2) to change a task status  ");
 	System.out.println("(3) to remove a task");
 	System.out.println("(0) to return to previous page");
 	System.out.print(">> ");
 	int p = validate(0,3);
+	// Switch Case for Option 3 for the editing
 	switch(p)
 	{
 	case 0:
 		Display();
 	case 1:
-		ShowByDate(true);
+		
+		ShowByDate(true);// Display the tasks along with TaskNumber for editing purposes
 		System.out.println("Enter task number you want to edit : ");
 		p=in.nextInt();
+		// Check the existence of the task number
 		if(taskManager.TaskNumberCheck(p))
 		edit(p);
 		else
 		System.out.println("No exsits task number ");
-		UserInterfaceEditOption();
+		UserInterfaceEditOption();// To return to sub menu 3
 		break;
 	case 2:
-		ShowByDate(true);
-		System.out.println("Enter task number for the task you want to make it as Done : ");
+		ShowByDate(true);// Display the tasks along with TaskNumber for editing purposes
+		System.out.print("Enter task number for the task you want to change it's status : ");
 		p=in.nextInt();
+		// Check the existence of the task number
 		if(taskManager.TaskNumberCheck(p))
 		taskManager.StatusEdit(p);
 		else
 		System.out.println("No exsits task number ");	
-		UserInterfaceEditOption();
+		UserInterfaceEditOption();// To return to sub menu 3
 		break; 
 	case 3:
-		ShowByDate(true);
+		ShowByDate(true);// Display the tasks along with TaskNumber for editing purposes
 		System.out.print("Enter task number to remove : ");
 		p=in.nextInt();
+		// Check the existence of the task number
 		if(taskManager.TaskNumberCheck(p))
 		taskManager.RemoveTask(p);
 		else
 		System.out.println("No exsits task number ");
-		UserInterfaceEditOption();
+		UserInterfaceEditOption();// To return to sub menu 3
 		break;
 	default:
 		System.out.println("Invalid input ");
-		UserInterfaceEditOption();
+		UserInterfaceEditOption();// To return to sub menu 3 if error caught
 	}
 	
 } // End of Option 3 method
 	
 
-
-	public void showtask() throws ParseException
+	
+	/**
+	 * Method for showing the task filtered by the project
+	 * @throws ParseException for the date printing
+	 */
+	public void ShowTasksByProject() throws ParseException
 	{
 		String project=projectnames("show"); // Do display  projects and add specific message for the user 
 		for (Entry<String, List<Task>> s : taskManager.ToDol.entrySet())
@@ -263,6 +313,12 @@ public void UserInterfaceEditOption() throws ParseException, FileNotFoundExcepti
 			
 		
 	
+	/**
+	 * Method responsible for the Option 1 in the Sub menu for editing
+	 * It takes the user input and send it to the update method in the TaskManager
+	 * @param TaskNumber is the task number the user want to edit
+	 * @throws ParseException for the date printing
+	 */
 	public void edit(int TaskNumber) throws ParseException
 	{
 		Scanner in = new Scanner(System.in);
@@ -287,15 +343,11 @@ public void UserInterfaceEditOption() throws ParseException, FileNotFoundExcepti
 								System.out.println("Enter a new DueDate or press Enter to keep it same");
 								String date =in.nextLine();
 								
-								//date = (date.length()==0) ? taskManager.DateToString(task.getDueDate()) : date ;
-								
 								if(date.length()==0)
 								date = taskManager.DateToString(task.getDueDate());
 								else 
 								date=ValDate(date);
 							
-								
-								
 								boolean st = task.getTaskStatus().equalsIgnoreCase("ToDo") ? false : true;
 								project = (project.length()==0) ? task.getProjectName() : project ;
 								title = (title.length()==0) ? task.getTitle() : title ;
@@ -313,15 +365,18 @@ public void UserInterfaceEditOption() throws ParseException, FileNotFoundExcepti
 									return;
 								}
 							}
-				
-			
 					}
 			}
 	} // End of edit method
 	
 	
-	
-	// Method to validate the user entry for the menu chooses 
+	/**
+	 * Method to validate the user entry for the menu choices
+	 * @param the FROM number that the user can choice TYPE INT
+	 * @param the TO number that the user can choice TYPE INT
+	 * @return The valid choice that only accepted in the displayed menu type INT
+	 */
+	 
 	public int validate(int a,int b) 
 	{
 		int c =0;
@@ -349,7 +404,11 @@ public void UserInterfaceEditOption() throws ParseException, FileNotFoundExcepti
 	
 	
 	
-	// Method to validate the user entry for the date 
+	
+	/**
+	 * Method to take the date from user and validate it 
+	 * @return a valid date TYPE String
+	 */
 	public String ValDate()
 	{	
 		dateFormat.setLenient(false);
@@ -383,7 +442,12 @@ public void UserInterfaceEditOption() throws ParseException, FileNotFoundExcepti
 	    }
 		
 	
-	// OVERLOAD Method to validate the user entry for the date 
+	 
+	/**
+	 * OVERLOAD Method to validate the user entry for the date 
+	 * @param dd is the date that user entered and want to be validated else the user will enter again until validate
+	 * @return a valid date TYPE String
+	 */
 	public String ValDate(String dd)
 	{	
 		dateFormat.setLenient(false);
@@ -415,7 +479,11 @@ public void UserInterfaceEditOption() throws ParseException, FileNotFoundExcepti
 		return taskManager.DateToString(date);
 	    }
 	
-	
+	/**
+	 * Method to show the existence projects for different purposes and take the user choice for which project 
+	 * @param MSG a String word for specifying the method calling purpose
+	 * @return a project name TYPE String
+	 */
 	public String projectnames(String MSG)
 	{
 		
@@ -445,7 +513,12 @@ public void UserInterfaceEditOption() throws ParseException, FileNotFoundExcepti
 		
 	}
 	
-	// Method to validate the user entry for the task status
+	
+	/**
+	 * Method to validate the user entry for the task status
+	 * User can only enter Done or ToDo .
+	 * @return a valid status TYPE String
+	 */
 	public String StatusCheck()
 	{
 		String status =null;
@@ -471,14 +544,26 @@ public void UserInterfaceEditOption() throws ParseException, FileNotFoundExcepti
 	
 	
 	// Method for controlling the project length in display screens
-	public String CheckDisplayLenght(String project,int max)
+	/**
+	 * Method for controlling the text length in display screens
+	 * @param text is the text needed to be controlled
+	 * @param max is the maximum allowed length for the text else print ... 
+	 * @return the text after editing for displaying if the length is greater that the max length allowed TYPE String
+	 */
+	public String CheckDisplayLenght(String text,int max)
 	{
-		if(project.length()>max)	
-		return project.substring(0,max-3)+"...";
-		return project;
+		if(text.length()>max)	
+		return text.substring(0,max-3)+"...";
+		return text;
 	}
 	
-	// Method to Display the project date wise
+	
+	/**
+	 * Method to Display the project date wise 
+	 * @param showT_number a boolean variable if True display the tasks with the TaskNaumber for editing purposes
+	 * else display the tasks without showing the TaskNaumber
+	 * @throws ParseException for the date printing
+	 */
 	public void ShowByDate(boolean showT_number) throws ParseException
 	{
 		List<Task> list = taskManager.Sorting();

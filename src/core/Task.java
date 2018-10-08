@@ -1,3 +1,4 @@
+package core;
 /**
  * This class is the Task class.
  */
@@ -27,7 +28,10 @@ public class Task {
 	SimpleDateFormat dateFormat;
 	Date date ;
 	
-	//Constructor to initial status of the task list to ToDo
+	
+	/**
+	 * Constructor to initial status of the task list to ToDo
+	 */
 	public Task()
 	{
 	// Initiate all the task status to ToDO
@@ -56,7 +60,7 @@ public class Task {
 	}
 	
 	/**	
-	 * Getter method
+	 * Getter method for the task's project number
 	 * @return the Project name
 	 */
 	public String getProjectName()
@@ -64,17 +68,28 @@ public class Task {
 		return project;
 	}
 	/**
-	 * Getter method
+	 * Getter method for the task's title 
 	 * @return the title of the task
 	 */
 	public String getTitle()
 	{
 		return title;
 	}
+	
+	/**
+	 * Getter method for the task's DueDate
+	 * @return the Due'date TYPE Date
+	 * @throws ParseException
+	 */
 	public Date getDueDate() throws ParseException
 	{
 		return dueDate;
 	}
+	
+	/**
+	 * Getter method for the task's Status
+	 * @return the 
+	 */
 	public String getTaskStatus()
 	{	
 		if(status)
@@ -82,6 +97,8 @@ public class Task {
 		else
 		return "ToDo";
 	}
+	
+	
 	public int getTaskNumber()
 	{
 	   
