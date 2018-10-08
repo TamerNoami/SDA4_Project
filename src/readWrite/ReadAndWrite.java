@@ -52,7 +52,7 @@ public class ReadAndWrite  {
 	
 	out.close();
 	fileOut.close();
-	System.out.println("\nSerialization Successful... Checkout your specified output file..\n");
+	//System.out.println("\nSerialization Successful... Checkout your specified output file..\n");
 	}
 	catch(IOException e)
 	{
