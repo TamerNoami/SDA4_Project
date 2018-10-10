@@ -11,3 +11,5 @@ ToDo list is a simple application to save your daily tasks for the user to keep 
 - Mark task as Done / ToDo
 - Edit task
 - Delete single task
+- Delete all Done task/s
+- Exit with and without saving
