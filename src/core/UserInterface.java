@@ -253,14 +253,23 @@ public class UserInterface {
 			break;
 		case 3:
 			ShowByDate(true);// Display the tasks along with TaskNumber for editing purposes
-			System.out.print("Enter task number to remove : >> ");
+			System.out.print("\nEnter task number to remove or 0 to remove all done tasks : >> ");
 			p = validateEntryInt();
+			ShowByDate(true);
+			if(p==0)
+			{
+			taskManager.RemoveAllDoneTask();
+			System.out.println("\nAll Done tasks has been removed \n");
+			UserInterfaceEditOption();
+			}
 			// Check the existence of the task number
 			if (taskManager.TaskNumberCheck(p))
-				{taskManager.RemoveTask(p);
-				System.out.println("\nTask has been removed from your list \n");}
+				{
+				taskManager.RemoveTask(p);
+				System.out.println("\nTask has been removed from your list \n");
+				}
 			else
-				System.out.println("No exsits task number ");
+			System.out.println("No exsits task number ");
 			UserInterfaceEditOption();// To return to sub menu 3
 			break;
 		default:

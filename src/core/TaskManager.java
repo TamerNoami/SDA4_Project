@@ -101,6 +101,31 @@ public class TaskManager {
 		}
 	}
 
+	
+	/**
+	 * Method for removing all done tasks in the tasks lists
+	 */
+	public void RemoveAllDoneTask() {
+		try {
+			Iterator<Entry<String, List<Task>>> It = ToDol.entrySet().iterator();
+			while (It.hasNext()) {
+				
+				List<Task> Itr = It.next().getValue();
+				Iterator<Task> asd = Itr.iterator();
+				while (asd.hasNext()) {	
+					if (asd.next().getTaskStatus().equals("Done")) {
+						asd.remove();
+					}
+				}
+				
+				if (Itr.size() == 0)
+					It.remove();
+			}
+		} catch (ConcurrentModificationException e) {
+			return;
+		}
+	}
+	
 	/**
 	 * Method for editing the task status
 	 * 
