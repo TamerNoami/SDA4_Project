@@ -7,6 +7,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+
 public class Task {
 	/**
 	 * The fields for the task are as follow String project to store the project
@@ -22,8 +23,10 @@ public class Task {
 	private int TaskNumber = 0;
 	public static int T_counter = 0;
 
+	
+
 	SimpleDateFormat dateFormat;
-	Date date;
+	Date date = new Date();;
 
 	/**
 	 * Constructor to initial status of the task list to ToDo
@@ -32,7 +35,6 @@ public class Task {
 		// Initiate all the task status to ToDO
 		this.status = false;
 		TaskNumber = T_counter;
-		date = new Date();
 		dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 	}
 
@@ -106,12 +108,24 @@ public class Task {
 
 	/**
 	 * Override the method toString for specified String format
+	 * 
+	 * @return a String format TYPE String
 	 */
 	@Override
 	public String toString() {
 		return "\n" + project + "\n" + title + "\n" + dateFormat.format(dueDate) + "\n" + status + "\n" + TaskNumber
 				+ "\n";
 
+	}
+
+	/**
+	 * Getter for the task ID for the editing
+	 * 
+	 * @return TaskNumber TYPE INT
+	 */
+	public int getId() {
+		// TODO Auto-generated method stub
+		return TaskNumber;
 	}
 
 }

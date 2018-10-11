@@ -33,7 +33,8 @@ public class TaskManager {
 	SimpleDateFormat dateFormat;
 	Date date;
 	public final static String Date_format = "dd-MM-yyyy";
-
+	
+	
 	/**
 	 * Constructor to initiate the date Object
 	 * 
@@ -59,20 +60,25 @@ public class TaskManager {
 	 * @param st      the task's status TYPE boolean
 	 * @throws ParseException
 	 */
-	public void AddTask(String project, String title, Date dd, boolean st) throws ParseException {
-		Task task = new Task();
+	public int AddTask(String project, String title, Date dd, boolean st)  {
+		Task task = new Task(); 
+		
+		
 		task.setter(project, title, dd, st);
 
-		for (Entry<String, List<Task>> s : ToDol.entrySet())
+		for (Entry<String, List<Task>> list : ToDol.entrySet())
 
-			if (!(ToDol.isEmpty()) && s.getKey().equalsIgnoreCase(project)) {
+			if (!(ToDol.isEmpty()) && list.getKey().equalsIgnoreCase(project)) {
 				// Add the task to the ArrayList based on the project as a key If already exists
-				s.getValue().add(task);
-				return;
+				list.getValue().add(task);
+				return -1;
+				
 			}
 		listOfTask = new ArrayList<Task>();
 		listOfTask.add(task);
 		ToDol.put(project, listOfTask);
+		//return this.T_counter;
+		return task.getId();
 	}
 
 	/**
@@ -111,10 +117,10 @@ public class TaskManager {
 			while (It.hasNext()) {
 				
 				List<Task> Itr = It.next().getValue();
-				Iterator<Task> asd = Itr.iterator();
-				while (asd.hasNext()) {	
-					if (asd.next().getTaskStatus().equals("Done")) {
-						asd.remove();
+				Iterator<Task> list = Itr.iterator();
+				while (list.hasNext()) {	
+					if (list.next().getTaskStatus().equals("Done")) {
+						list.remove();
 					}
 				}
 				
